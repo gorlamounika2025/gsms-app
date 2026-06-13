@@ -1,0 +1,32 @@
+<section class="dashboard">
+  <header class="welcome">
+    <h1>Welcome back, {{ currentUser()?.fname }}</h1>
+    <p>Here is an overview of your GSMS workspace.</p>
+  </header>
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <div class="stat-grid">
+    @for (stat of stats(); track stat.label) {
+      <mat-card class="stat-card" appearance="outlined">
+        <div class="stat-icon" [class]="stat.tone">
+          <mat-icon>{{ stat.icon }}</mat-icon>
+        </div>
+        <div class="stat-body">
+          <span class="stat-value">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      </mat-card>
+    }
+  </div>
+
+  <mat-card class="info-card" appearance="outlined">
+    <h2>Getting started</h2>
+    <ul>
+      <li>Use <strong>Users</strong> to add, edit and remove team members.</li>
+      <li>Use <strong>Masters</strong> to manage roles, genders and locations.</li>
+    </ul>
+  </mat-card>
+</section>

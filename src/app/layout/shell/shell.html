@@ -1,0 +1,65 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav
+    #sidenav
+    class="sidenav"
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    [fixedInViewport]="isMobile()"
+  >
+    <div class="sidenav-brand">
+      <div class="brand-logo"><mat-icon>biotech</mat-icon></div>
+      <div class="brand-text">
+        <span class="brand-title">GSMS App</span>
+        <span class="brand-sub">Laboratory Mgmt</span>
+      </div>
+    </div>
+
+    <mat-nav-list>
+      @for (item of navItems; track item.route) {
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active-link"
+          (click)="onNavigate()"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content-wrapper">
+    <mat-toolbar color="primary" class="topbar">
+      @if (isMobile()) {
+        <button mat-icon-button (click)="sidenav.toggle()" aria-label="Toggle menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <span class="topbar-title">
+        {{ isMobile() ? 'GSMS App' : 'GSMS App | Laboratory Management System' }}
+      </span>
+      <span class="spacer"></span>
+
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+        <div class="avatar">{{ userInitial() }}</div>
+        <span class="user-name">{{ currentUser()?.fname }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <div class="menu-header">
+          <strong>{{ currentUser()?.fname }}</strong>
+          <small>{{ currentUser()?.mail }}</small>
+        </div>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Sign out</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <main class="page">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

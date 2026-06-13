@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit User' : 'Add User' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content class="dialog-content">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Full name</mat-label>
+      <input matInput formControlName="fname" />
+      @if (form.controls.fname.hasError('required')) {
+        <mat-error>Full name is required</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="uname" />
+        @if (form.controls.uname.hasError('required')) {
+          <mat-error>Username is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="pcode" />
+        @if (form.controls.pcode.hasError('required')) {
+          <mat-error>Password is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+      @if (form.controls.email.hasError('required')) {
+        <mat-error>Email is required</mat-error>
+      }
+      @if (form.controls.email.hasError('email')) {
+        <mat-error>Enter a valid email</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Mobile</mat-label>
+        <input matInput formControlName="Mobile" />
+        @if (form.controls.Mobile.hasError('required')) {
+          <mat-error>Mobile is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="Rid">
+          @for (role of roles; track role.id) {
+            <mat-option [value]="role.id">{{ role.names }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Location ID</mat-label>
+      <input matInput type="number" formControlName="lid" />
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [mat-dialog-close]="undefined">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">
+      {{ isEdit ? 'Save changes' : 'Create user' }}
+    </button>
+  </mat-dialog-actions>
+</form>

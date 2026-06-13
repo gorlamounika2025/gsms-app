@@ -1,0 +1,136 @@
+.shell {
+  height: 100dvh;
+}
+
+.sidenav {
+  width: 248px;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-low);
+}
+
+.sidenav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px;
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--mat-sys-primary);
+
+    mat-icon {
+      color: var(--mat-sys-on-primary);
+    }
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+
+    .brand-title {
+      font: var(--mat-sys-title-medium);
+      letter-spacing: 1px;
+    }
+    .brand-sub {
+      font: var(--mat-sys-body-small);
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+}
+
+.active-link {
+  background: var(--mat-sys-secondary-container);
+
+  mat-icon,
+  span {
+    color: var(--mat-sys-on-secondary-container);
+  }
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .topbar-title {
+    font: var(--mat-sys-title-medium);
+    letter-spacing: 0.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--mat-sys-on-primary);
+    color: var(--mat-sys-primary);
+    font-weight: 600;
+  }
+
+  .user-name {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 599px) {
+  .user-button .user-name {
+    display: none;
+  }
+}
+
+.menu-header {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  small {
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.page {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+@media (max-width: 599px) {
+  .page {
+    padding: 16px;
+  }
+}

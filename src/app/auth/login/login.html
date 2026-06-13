@@ -1,0 +1,68 @@
+<div class="login-page">
+  <mat-card class="login-card" appearance="outlined">
+    <div class="brand">
+      <div class="brand-logo">
+        <mat-icon>biotech</mat-icon>
+      </div>
+      <h1>GSMS App</h1>
+      <p>Laboratory Management System</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="uname" autocomplete="username" />
+        <mat-icon matPrefix>person</mat-icon>
+        @if (form.controls.uname.hasError('required') && form.controls.uname.touched) {
+          <mat-error>Username is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="pcode"
+          [type]="hidePassword() ? 'password' : 'text'"
+          autocomplete="current-password"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="togglePassword()"
+          [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+        >
+          <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        @if (form.controls.pcode.hasError('required') && form.controls.pcode.touched) {
+          <mat-error>Password is required</mat-error>
+        }
+      </mat-form-field>
+
+      @if (error()) {
+        <div class="login-error" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ error() }}</span>
+        </div>
+      }
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        class="full-width submit-btn"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          <mat-progress-spinner diameter="20" mode="indeterminate" />
+        } @else {
+          <span>Sign in</span>
+        }
+      </button>
+
+      <p class="hint">Demo credentials: <strong>admin / admin</strong></p>
+    </form>
+  </mat-card>
+</div>
