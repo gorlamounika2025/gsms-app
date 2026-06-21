@@ -24,6 +24,13 @@ export const routes: Routes = [
         path: 'masters',
         loadComponent: () => import('./masters/masters-page/masters-page').then((m) => m.MastersPage),
       },
+      {
+        path: 'transactions',
+        loadComponent: () =>
+          import('./transactions/transactions-page/transactions-page').then(
+            (m) => m.TransactionsPage,
+          ),
+      },
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
     ],
   },

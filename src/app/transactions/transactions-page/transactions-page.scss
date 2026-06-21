@@ -1,0 +1,81 @@
+.transactions-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.page-header {
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-headline-small);
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.tabs-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  button {
+    white-space: nowrap;
+  }
+
+  .active-tab {
+    background: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+    border-color: transparent;
+  }
+}
+
+.transaction-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  h2 {
+    margin: 0;
+    font: var(--mat-sys-title-large);
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+}
+
+.panel-placeholder {
+  border: 1px dashed var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+
+  span {
+    color: var(--mat-sys-on-surface-variant);
+  }
+}

@@ -1,0 +1,38 @@
+<section class="transactions-page">
+  <header class="page-header">
+    <h1>Transactions</h1>
+    <p>Select a transaction tab to open its workflow panel.</p>
+  </header>
+
+  <div class="tabs-toggle" role="tablist" aria-label="Transactions tabs">
+    @for (tab of tabs; track tab.key) {
+      <button
+        mat-stroked-button
+        type="button"
+        role="tab"
+        [attr.aria-selected]="selectedTab() === tab.key"
+        [class.active-tab]="selectedTab() === tab.key"
+        (click)="onTabChange(tab.key)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  <mat-card appearance="outlined" class="transaction-card">
+    <div class="card-header">
+      <div class="card-icon">
+        <mat-icon>{{ activeTab().icon }}</mat-icon>
+      </div>
+      <div>
+        <h2>{{ activeTab().label }}</h2>
+        <p>{{ activeTab().subtitle }}</p>
+      </div>
+    </div>
+
+    <div class="panel-placeholder">
+      <span>Selected tab:</span>
+      <strong>{{ activeTab().label }}</strong>
+    </div>
+  </mat-card>
+</section>
