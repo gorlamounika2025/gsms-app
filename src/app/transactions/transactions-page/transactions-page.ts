@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 
 interface TransactionTab {
@@ -12,7 +12,7 @@ interface TransactionTab {
 
 @Component({
   selector: 'app-transactions-page',
-  imports: [MatCardModule, MatButtonToggleModule, MatIconModule],
+  imports: [MatButtonModule, MatCardModule, MatIconModule],
   templateUrl: './transactions-page.html',
   styleUrl: './transactions-page.scss',
 })

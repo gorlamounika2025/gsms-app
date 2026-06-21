@@ -4,16 +4,20 @@
     <p>Select a transaction tab to open its workflow panel.</p>
   </header>
 
-  <mat-button-toggle-group
-    class="tabs-toggle"
-    [value]="selectedTab()"
-    (change)="onTabChange($event.value)"
-    hideSingleSelectionIndicator
-  >
+  <div class="tabs-toggle" role="tablist" aria-label="Transactions tabs">
     @for (tab of tabs; track tab.key) {
-      <mat-button-toggle [value]="tab.key">{{ tab.label }}</mat-button-toggle>
+      <button
+        mat-stroked-button
+        type="button"
+        role="tab"
+        [attr.aria-selected]="selectedTab() === tab.key"
+        [class.active-tab]="selectedTab() === tab.key"
+        (click)="onTabChange(tab.key)"
+      >
+        {{ tab.label }}
+      </button>
     }
-  </mat-button-toggle-group>
+  </div>
 
   <mat-card appearance="outlined" class="transaction-card">
     <div class="card-header">

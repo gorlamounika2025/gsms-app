@@ -17,13 +17,18 @@
 }
 
 .tabs-toggle {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-  white-space: nowrap;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 
-  mat-button-toggle {
-    text-wrap: nowrap;
+  button {
+    white-space: nowrap;
+  }
+
+  .active-tab {
+    background: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+    border-color: transparent;
   }
 }
 
