@@ -11,7 +11,7 @@ export class MasterService {
     return this.api.get<Master[]>('masters', { tname });
   }
 
-  create(payload: MasterUpsert): Observable<{ id: number }> {
+  save(payload: MasterUpsert): Observable<{ id: number }> {
     return this.api.post<{ id: number }>('masters', payload);
   }
 

@@ -18,11 +18,17 @@ export const routes: Routes = [
       },
       {
         path: 'users',
-        loadComponent: () => import('./users/users-list/users-list').then((m) => m.UsersList),
+        redirectTo: 'masters?tab=users',
+        pathMatch: 'full',
       },
       {
         path: 'masters',
         loadComponent: () => import('./masters/masters-page/masters-page').then((m) => m.MastersPage),
+      },
+      {
+        path: 'transactions',
+        loadComponent: () =>
+          import('./transactions/transactions-page/transactions-page').then((m) => m.TransactionsPage),
       },
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
     ],

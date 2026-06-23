@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -32,6 +32,11 @@ import { ConfirmDialog, ConfirmData } from '../../shared/confirm-dialog/confirm-
   styleUrl: './users-list.scss',
 })
 export class UsersList {
+  /** When true, omits the page header (for embedding under Masters tabs). */
+  readonly embedded = input(false);
+  /** Optional page-level search text (from Masters global search). */
+  readonly searchQuery = input('');
+
   private readonly userService = inject(UserService);
   private readonly masterService = inject(MasterService);
   private readonly auth = inject(AuthService);
@@ -46,6 +51,17 @@ export class UsersList {
   readonly pageIndex = signal(0);
   readonly pageSize = signal(10);
   readonly total = signal(0);
+
+  readonly filteredUsers = computed(() => {
+    const query = this.searchQuery().trim().toLowerCase();
+    const list = this.users();
+    if (!query) return list;
+    return list.filter((user) =>
+      [user.uid, user.fname, user.uname, user.mail, user.mob, this.roleName(user.rid)].some(
+        (value) => String(value ?? '').toLowerCase().includes(query)
+      )
+    );
+  });
 
   constructor() {
     this.loadRoles();

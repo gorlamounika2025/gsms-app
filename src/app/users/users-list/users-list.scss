@@ -1,7 +1,13 @@
-.users-page {
+.users-page,
+.users-panel {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.panel-toolbar {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .page-header {

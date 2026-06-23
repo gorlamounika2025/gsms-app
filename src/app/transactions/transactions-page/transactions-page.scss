@@ -1,4 +1,4 @@
-.masters-page {
+.transactions-page {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -15,14 +15,11 @@
     margin: 0;
     font: var(--mat-sys-headline-small);
   }
+
   p {
     margin: 4px 0 0;
     color: var(--mat-sys-on-surface-variant);
   }
-}
-
-.type-toggle {
-  flex-wrap: wrap;
 }
 
 .tab-toggle {
@@ -41,9 +38,10 @@
   min-height: 280px;
 }
 
-.global-search {
-  width: 100%;
-  max-width: 420px;
+.panel-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
 }
 
 .table-card {
@@ -55,12 +53,12 @@
   overflow-x: auto;
 }
 
-.masters-table {
+.data-table {
   width: 100%;
 }
 
 .actions-col {
-  width: 80px;
+  width: 110px;
   text-align: right;
   white-space: nowrap;
 }

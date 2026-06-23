@@ -48,8 +48,8 @@ export class Shell {
 
   readonly navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-    { label: 'Users', icon: 'group', route: '/users' },
     { label: 'Masters', icon: 'list_alt', route: '/masters' },
+    { label: 'Transactions', icon: 'receipt_long', route: '/transactions' },
   ];
 
   constructor() {

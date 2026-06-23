@@ -1,0 +1,116 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Results' : 'Enter Results' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content class="content">
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Sample ID</mat-label>
+        <input matInput type="number" formControlName="sid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Patient ID</mat-label>
+        <input matInput type="number" formControlName="patid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Result number</mat-label>
+        <input matInput formControlName="rno" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <input matInput formControlName="rs" />
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Entered by</mat-label>
+        <input matInput type="number" formControlName="eby" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Verified by</mat-label>
+        <input matInput type="number" formControlName="vby" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Is verified</mat-label>
+        <input matInput formControlName="isver" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Is approved</mat-label>
+        <input matInput formControlName="isapp" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Remarks</mat-label>
+      <input matInput formControlName="rmks" />
+    </mat-form-field>
+
+    <div class="section-title">
+      Result lines (ipjson)
+      <button mat-stroked-button type="button" (click)="addLine()">
+        <mat-icon>add</mat-icon>
+        Add line
+      </button>
+    </div>
+
+    @for (line of lines.controls; track $index; let i = $index) {
+      <div class="line-card" [formGroup]="$any(line)">
+        <div class="line-header">
+          <span>Line {{ i + 1 }}</span>
+          @if (lines.length > 1) {
+            <button mat-icon-button type="button" color="warn" (click)="removeLine(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Barcode</mat-label>
+            <input matInput formControlName="bcode" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Test ID</mat-label>
+            <input matInput type="number" formControlName="tid" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Parameter ID</mat-label>
+            <input matInput type="number" formControlName="pdid" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>PID</mat-label>
+            <input matInput type="number" formControlName="pid" />
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Result value</mat-label>
+            <input matInput formControlName="rslt" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Normal range</mat-label>
+            <input matInput formControlName="nrange" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Flag</mat-label>
+            <input matInput formControlName="rsltflag" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Line status</mat-label>
+            <input matInput formControlName="rsltstatus" />
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Line remarks</mat-label>
+          <input matInput formControlName="rsltrmks" />
+        </mat-form-field>
+      </div>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [mat-dialog-close]="undefined">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">
+      {{ isEdit ? 'Save results' : 'Submit results' }}
+    </button>
+  </mat-dialog-actions>
+</form>

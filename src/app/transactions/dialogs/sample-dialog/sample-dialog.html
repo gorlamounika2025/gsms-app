@@ -1,0 +1,112 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Sample' : 'Log Sample' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content class="content">
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Bill ID</mat-label>
+        <input matInput type="number" formControlName="bid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Patient ID</mat-label>
+        <input matInput type="number" formControlName="pid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Collection date</mat-label>
+        <input matInput formControlName="cdt" placeholder="YYYY/MM/DD" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Sample status (ss)</mat-label>
+        <input matInput formControlName="ss" />
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Sample no</mat-label>
+        <input matInput formControlName="sno" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Difficult collection</mat-label>
+        <input matInput formControlName="diffcoll" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Repeat collection</mat-label>
+        <input matInput formControlName="repcoll" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fast track (fs)</mat-label>
+        <input matInput formControlName="fs" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Remarks</mat-label>
+      <input matInput formControlName="rmks" />
+    </mat-form-field>
+
+    <div class="section-title">
+      Sample lines (ipjson)
+      <button mat-stroked-button type="button" (click)="addLine()">
+        <mat-icon>add</mat-icon>
+        Add line
+      </button>
+    </div>
+
+    @for (line of lines.controls; track $index; let i = $index) {
+      <div class="line-card" [formGroup]="$any(line)">
+        <div class="line-header">
+          <span>Line {{ i + 1 }}</span>
+          @if (lines.length > 1) {
+            <button mat-icon-button type="button" color="warn" (click)="removeLine(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Barcode</mat-label>
+            <input matInput formControlName="bcode" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Test ID</mat-label>
+            <input matInput type="number" formControlName="tid" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Volume</mat-label>
+            <input matInput type="number" formControlName="volcoll" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Containers</mat-label>
+            <input matInput type="number" formControlName="noofcont" />
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Sample type ID</mat-label>
+            <input matInput type="number" formControlName="smtid" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Specimen type ID</mat-label>
+            <input matInput type="number" formControlName="spctid" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Container type ID</mat-label>
+            <input matInput type="number" formControlName="ctypeid" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Tube type ID</mat-label>
+            <input matInput type="number" formControlName="ttid" />
+          </mat-form-field>
+        </div>
+      </div>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [mat-dialog-close]="undefined">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">
+      {{ isEdit ? 'Save sample' : 'Create sample' }}
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -6,7 +6,7 @@ export interface Master {
   names: string;
 }
 
-/** Payload for inserting a master record. `mid: 0` means insert. */
+/** Payload for creating or updating a master record. `mid: 0` means insert. */
 export interface MasterUpsert {
   mid: number;
   cd: string;

@@ -2,11 +2,8 @@
  * GSMS dev/prod proxy (Backend-for-Frontend).
  *
  * The upstream GSMS API (https://api.gsms.app/api) requires a JSON *request body*
- * even on some GET endpoints (`GET /users`, `GET /masters`). Browsers (XHR/fetch)
- * cannot send a body with a GET request, so the Angular app talks to this proxy
- * instead. The proxy accepts browser-friendly query params for those list
- * endpoints and re-issues the request to the upstream API as a GET-with-body
- * (which Node's http stack supports). All other requests are forwarded as-is.
+ * even on some GET endpoints. Browsers cannot send a body with a GET request, so the
+ * Angular app talks to this proxy instead.
  */
 import http from 'node:http';
 import https from 'node:https';
@@ -30,19 +27,50 @@ function readBody(req) {
   });
 }
 
-/**
- * Decide how to call the upstream for a given incoming request.
- * Returns { method, body } where body is a Buffer or null.
- */
+function numOrNull(query, key) {
+  return query.get(key) != null ? Number(query.get(key)) : null;
+}
+
+function strOrEmpty(query, key) {
+  return query.get(key) ?? '';
+}
+
+function toUsDate(d) {
+  return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+}
+
+function toIsoDate(d) {
+  return d.toISOString().slice(0, 10);
+}
+
+/** GSMS list endpoints reject empty fdt/tdt; apply documented defaults when missing. */
+function listDateFilters(query, apiPath) {
+  const end = new Date();
+  const start = new Date();
+  start.setFullYear(end.getFullYear() - 5);
+  const iso = apiPath === 'samples' || apiPath === 'results';
+  const defaults = iso
+    ? { fdt: toIsoDate(start), tdt: toIsoDate(end) }
+    : { fdt: toUsDate(start), tdt: toUsDate(end) };
+  const fdt = query.get('fdt');
+  const tdt = query.get('tdt');
+  return {
+    fdt: fdt && fdt !== '' ? fdt : defaults.fdt,
+    tdt: tdt && tdt !== '' ? tdt : defaults.tdt,
+  };
+}
+
+function paginated(query) {
+  return {
+    pn: Number(query.get('pn') ?? 1),
+    ps: Number(query.get('ps') ?? 10),
+    lid: numOrNull(query, 'lid'),
+  };
+}
+
 function planUpstream(req, pathname, query, incomingBody) {
-  // List endpoints that require a GET-with-body upstream.
   if (req.method === 'GET' && pathname === '/api/users') {
-    const payload = {
-      uid: Number(query.get('uid') ?? 0),
-      lid: query.get('lid') != null ? Number(query.get('lid')) : null,
-      pn: Number(query.get('pn') ?? 1),
-      ps: Number(query.get('ps') ?? 10),
-    };
+    const payload = { uid: Number(query.get('uid') ?? 0), ...paginated(query) };
     return { method: 'GET', body: Buffer.from(JSON.stringify(payload)) };
   }
 
@@ -51,7 +79,73 @@ function planUpstream(req, pathname, query, incomingBody) {
     return { method: 'GET', body: Buffer.from(JSON.stringify(payload)) };
   }
 
-  // Everything else: forward verbatim (POST login/insert, GET /users/:id, DELETE, etc.)
+  if (req.method === 'GET' && pathname === '/api/patients') {
+    const payload = {
+      pid: Number(query.get('pid') ?? 0),
+      ...listDateFilters(query, 'patients'),
+      pname: strOrEmpty(query, 'pname'),
+      mob: strOrEmpty(query, 'mob'),
+      ...paginated(query),
+    };
+    return { method: 'GET', body: Buffer.from(JSON.stringify(payload)) };
+  }
+
+  if (req.method === 'GET' && pathname === '/api/visits') {
+    const payload = {
+      vid: Number(query.get('vid') ?? 0),
+      ...listDateFilters(query, 'visits'),
+      ...paginated(query),
+    };
+    return { method: 'GET', body: Buffer.from(JSON.stringify(payload)) };
+  }
+
+  if (req.method === 'GET' && pathname === '/api/orders') {
+    const payload = {
+      id: Number(query.get('id') ?? 0),
+      ...listDateFilters(query, 'orders'),
+      ...paginated(query),
+    };
+    return { method: 'GET', body: Buffer.from(JSON.stringify(payload)) };
+  }
+
+  if (req.method === 'GET' && pathname === '/api/bills') {
+    const payload = {
+      bid: Number(query.get('bid') ?? 0),
+      pcd: strOrEmpty(query, 'pcd'),
+      pname: strOrEmpty(query, 'pname'),
+      mb: strOrEmpty(query, 'mb'),
+      ...listDateFilters(query, 'bills'),
+      ...paginated(query),
+    };
+    return { method: 'GET', body: Buffer.from(JSON.stringify(payload)) };
+  }
+
+  if (req.method === 'GET' && pathname === '/api/samples') {
+    const payload = {
+      sid: Number(query.get('sid') ?? 0),
+      sno: strOrEmpty(query, 'sno'),
+      pcd: strOrEmpty(query, 'pcd'),
+      pname: strOrEmpty(query, 'pname'),
+      mb: strOrEmpty(query, 'mb'),
+      ...listDateFilters(query, 'samples'),
+      ...paginated(query),
+    };
+    return { method: 'GET', body: Buffer.from(JSON.stringify(payload)) };
+  }
+
+  if (req.method === 'GET' && pathname === '/api/results') {
+    const payload = {
+      rid: Number(query.get('rid') ?? 0),
+      sno: strOrEmpty(query, 'sno'),
+      pcd: strOrEmpty(query, 'pcd'),
+      pname: strOrEmpty(query, 'pname'),
+      mb: strOrEmpty(query, 'mb'),
+      ...listDateFilters(query, 'results'),
+      ...paginated(query),
+    };
+    return { method: 'GET', body: Buffer.from(JSON.stringify(payload)) };
+  }
+
   return { method: req.method, body: incomingBody.length ? incomingBody : null };
 }
 

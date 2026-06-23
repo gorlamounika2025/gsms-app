@@ -4,9 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MasterUpsert } from '../../models/master.model';
+import { Master, MasterUpsert } from '../../models/master.model';
 
 export interface MasterDialogData {
+  master: Master | null;
   tname: string;
   typeLabel: string;
   cby: number;
@@ -22,7 +23,7 @@ export interface MasterDialogData {
     MatButtonModule,
   ],
   template: `
-    <h2 mat-dialog-title>Add {{ data.typeLabel }}</h2>
+    <h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Add' }} {{ data.typeLabel }}</h2>
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-dialog-content class="content">
         <mat-form-field appearance="outline" class="full-width">
@@ -39,7 +40,9 @@ export interface MasterDialogData {
       </mat-dialog-content>
       <mat-dialog-actions align="end">
         <button mat-button type="button" [mat-dialog-close]="undefined">Cancel</button>
-        <button mat-flat-button color="primary" type="submit">Create</button>
+        <button mat-flat-button color="primary" type="submit">
+          {{ isEdit ? 'Save changes' : 'Create' }}
+        </button>
       </mat-dialog-actions>
     </form>
   `,
@@ -62,9 +65,11 @@ export class MasterDialog {
   private readonly ref = inject(MatDialogRef<MasterDialog, MasterUpsert>);
   readonly data = inject<MasterDialogData>(MAT_DIALOG_DATA);
 
+  readonly isEdit = this.data.master !== null;
+
   readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required]],
-    cd: [''],
+    name: [this.data.master?.names ?? '', [Validators.required]],
+    cd: [this.data.master?.cd ?? ''],
   });
 
   submit(): void {
@@ -74,7 +79,7 @@ export class MasterDialog {
     }
     const value = this.form.getRawValue();
     const payload: MasterUpsert = {
-      mid: 0,
+      mid: this.data.master ? Number(this.data.master.id) : 0,
       cd: value.cd.trim(),
       name: value.name.trim(),
       tname: this.data.tname,
