@@ -1,0 +1,143 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Receipt' : 'Create Receipt' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content class="content">
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Patient ID</mat-label>
+        <input matInput type="number" formControlName="pid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Visit ID</mat-label>
+        <input matInput type="number" formControlName="vid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Bill number</mat-label>
+        <input matInput formControlName="bno" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <input matInput formControlName="bs" />
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Gross amount</mat-label>
+        <input matInput type="number" formControlName="gamt" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Discount</mat-label>
+        <input matInput type="number" formControlName="discount" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Tax</mat-label>
+        <input matInput type="number" formControlName="tax" />
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Net amount</mat-label>
+        <input matInput type="number" formControlName="netamt" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Paid amount</mat-label>
+        <input matInput type="number" formControlName="pamt" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Balance</mat-label>
+        <input matInput type="number" formControlName="balamt" />
+      </mat-form-field>
+    </div>
+
+    <div class="section-title">
+      Bill lines (billdetjson)
+      <button mat-stroked-button type="button" (click)="addBillLine()">
+        <mat-icon>add</mat-icon>
+        Add line
+      </button>
+    </div>
+
+    @for (line of billLines.controls; track $index; let i = $index) {
+      <div class="line-card" [formGroup]="$any(line)">
+        <div class="line-header">
+          <span>Line {{ i + 1 }}</span>
+          @if (billLines.length > 1) {
+            <button mat-icon-button type="button" color="warn" (click)="removeBillLine(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Test ID</mat-label>
+            <input matInput type="number" formControlName="tid" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Qty</mat-label>
+            <input matInput type="number" formControlName="qty" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Price</mat-label>
+            <input matInput type="number" formControlName="price" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Total</mat-label>
+            <input matInput type="number" formControlName="tamount" />
+          </mat-form-field>
+        </div>
+      </div>
+    }
+
+    <div class="section-title">
+      Payments (paydetjson)
+      <button mat-stroked-button type="button" (click)="addPayLine()">
+        <mat-icon>add</mat-icon>
+        Add payment
+      </button>
+    </div>
+
+    @for (line of payLines.controls; track $index; let i = $index) {
+      <div class="line-card" [formGroup]="$any(line)">
+        <div class="line-header">
+          <span>Payment {{ i + 1 }}</span>
+          @if (payLines.length > 1) {
+            <button mat-icon-button type="button" color="warn" (click)="removePayLine(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Method ID</mat-label>
+            <input matInput type="number" formControlName="pmid" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Reference</mat-label>
+            <input matInput formControlName="refno" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Paid amount</mat-label>
+            <input matInput type="number" formControlName="paidamt" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Received by</mat-label>
+            <input matInput type="number" formControlName="recby" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Card</mat-label>
+            <input matInput formControlName="card" />
+          </mat-form-field>
+        </div>
+      </div>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [mat-dialog-close]="undefined">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">
+      {{ isEdit ? 'Save receipt' : 'Create receipt' }}
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -1,0 +1,88 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Order' : 'Create Order' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content class="content">
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Visit ID</mat-label>
+        <input matInput type="number" formControlName="vid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Order date</mat-label>
+        <input matInput formControlName="oddt" placeholder="MM/DD/YYYY" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Priority type</mat-label>
+        <input matInput formControlName="ptype" />
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <input matInput formControlName="os" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Ordered by (user id)</mat-label>
+        <input matInput type="number" formControlName="odby" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Order code</mat-label>
+        <input matInput formControlName="ocd" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Remarks</mat-label>
+      <input matInput formControlName="rmks" />
+    </mat-form-field>
+
+    <div class="lines">
+      <div class="line-header">
+        <span>Test lines (ipjson)</span>
+        <button mat-stroked-button type="button" (click)="addLine()">
+          <mat-icon>add</mat-icon>
+          Add line
+        </button>
+      </div>
+
+      @for (line of lines.controls; track $index; let i = $index) {
+        <div class="line-card" [formGroup]="$any(line)">
+          <div class="line-header">
+            <span>Line {{ i + 1 }}</span>
+            @if (lines.length > 1) {
+              <button mat-icon-button type="button" color="warn" (click)="removeLine(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Test ID</mat-label>
+              <input matInput type="number" formControlName="tid" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Price</mat-label>
+              <input matInput type="number" formControlName="price" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Qty</mat-label>
+              <input matInput type="number" formControlName="qty" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Priority</mat-label>
+              <input matInput formControlName="priority" />
+            </mat-form-field>
+          </div>
+        </div>
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [mat-dialog-close]="undefined">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">
+      {{ isEdit ? 'Save order' : 'Create order' }}
+    </button>
+  </mat-dialog-actions>
+</form>

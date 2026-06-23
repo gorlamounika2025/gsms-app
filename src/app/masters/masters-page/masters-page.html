@@ -1,0 +1,111 @@
+<section class="masters-page">
+  <header class="page-header">
+    <div>
+      <h1>Masters</h1>
+      <p>{{ activePageTab.description }}</p>
+    </div>
+    @if (selectedPageTab() === 'masters') {
+      <button mat-flat-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon>
+        Add {{ singularLabel }}
+      </button>
+    }
+  </header>
+
+  <div class="tab-toggle">
+    <mat-button-toggle-group
+      [value]="selectedPageTab()"
+      (change)="onPageTabChange($event.value)"
+      hideSingleSelectionIndicator
+    >
+      @for (tab of pageTabs; track tab.key) {
+        <mat-button-toggle [value]="tab.key">{{ tab.label }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+  </div>
+
+  <mat-form-field appearance="outline" class="global-search">
+    <mat-label>Search</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      matInput
+      [value]="searchQuery()"
+      (input)="onSearchInput($event)"
+      [placeholder]="selectedPageTab() === 'users' ? 'Search users…' : 'Search masters…'"
+    />
+    @if (searchQuery()) {
+      <button mat-icon-button matSuffix type="button" aria-label="Clear search" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+
+  @if (selectedPageTab() === 'masters') {
+    <mat-button-toggle-group
+      class="type-toggle"
+      [value]="selectedType()"
+      (change)="onTypeChange($event.value)"
+      hideSingleSelectionIndicator
+    >
+      @for (type of masterTypes; track type.key) {
+        <mat-button-toggle [value]="type.key">{{ type.label }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+
+    <mat-card appearance="outlined" class="table-card">
+      @if (loading()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+
+      <div class="table-scroll">
+        <table mat-table [dataSource]="filteredItems()" class="masters-table">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let m">{{ m.id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="cd">
+            <th mat-header-cell *matHeaderCellDef>Code</th>
+            <td mat-cell *matCellDef="let m">{{ m.cd || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="names">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let m">{{ m.names }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-col">Actions</th>
+            <td mat-cell *matCellDef="let m" class="actions-col">
+              <button mat-icon-button color="primary" matTooltip="Edit" (click)="openEdit(m)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="Delete" (click)="confirmDelete(m)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+
+      @if (!loading() && items().length === 0) {
+        <div class="empty-state">
+          <mat-icon>inbox</mat-icon>
+          <p>No {{ selectedLabel.toLowerCase() }} found.</p>
+        </div>
+      } @else if (!loading() && filteredItems().length === 0) {
+        <div class="empty-state">
+          <mat-icon>search_off</mat-icon>
+          <p>No {{ selectedLabel.toLowerCase() }} match your search.</p>
+        </div>
+      }
+    </mat-card>
+  } @else {
+    <div class="panel-host">
+      <app-users-list [embedded]="true" [searchQuery]="searchQuery()" />
+    </div>
+  }
+</section>

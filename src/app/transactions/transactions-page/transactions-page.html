@@ -1,0 +1,24 @@
+<section class="transactions-page">
+  <header class="page-header">
+    <div>
+      <h1>Transactions</h1>
+      <p>{{ activeTab.description }}</p>
+    </div>
+  </header>
+
+  <div class="tab-toggle">
+    <mat-button-toggle-group
+      [value]="selectedTab()"
+      (change)="onTabChange($event.value)"
+      hideSingleSelectionIndicator
+    >
+      @for (tab of transactionTabs; track tab.key) {
+        <mat-button-toggle [value]="tab.key">{{ tab.label }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="panel-host">
+    <app-transaction-crud-panel [tabKey]="selectedTab()" />
+  </div>
+</section>
